@@ -50,7 +50,4 @@ git clone ssh://<userid>@tempest-reviews.eng.vmware.com:29418/cloud-testing
     4. Run with base url and node size parameters: ` java -jar end-to-end-testing-1.0.jar --testClass=UnprovisionInstanceTest --rest.baseUrl=localhost:8080 -=nodeSize=2`.
     5. Run with different plan and db version: `java -jar end-to-end-testing-1.0.jar --testGroup=fulltest --rest.baseUrl=localhost:8080 -=planName=Large --dbEngineVersion=mssql_2008R2`.    
     
-    
-
-*More details can be found at https://vchs-eng.atlassian.net/wiki/display/ENG/The+testing+framework.*
-*If any issue related to this project, please contact georgeliu@vmware.com*
+  
