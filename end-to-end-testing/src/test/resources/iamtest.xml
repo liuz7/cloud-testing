@@ -1,0 +1,26 @@
+<suite name="Custom suite" parallel="none" configfailurepolicy="continue">
+    <test verbose="1" name="iam-testing">
+        <parameter name="dbEngineVersion" value="mssql_2008R2"/>
+        <parameter name="planName" value="Small"/>
+        <parameter name="diskSize" value="0"/>
+        <parameter name="userId" value="cshan"/>
+        <parameter name="globalRole" value="Snapshot Admin"/>
+        <parameter name="instanceRole" value="Snapshot Owner"/>
+        <parameter name="user1" value="cshan" />
+        <parameter name="user2" value="fanzhang.jeffrey" />
+        <parameter name="assignGlobalRole" value="Sanpshot Admin" />
+        <parameter name="revokeGlobalRole" value="Sanpshot Admin" />
+        <parameter name="assignInstanceRole" value="Instance ReadOnly" />
+        <parameter name="revokeInstanceRole" value="Instance ReadOnly" />
+
+        <listeners>
+            <listener class-name="com.vmware.vchs.testng.ConcurrentListener"/>
+            <listener class-name="com.vmware.vchs.testng.IgnoreListener"/>
+            <listener class-name="com.vmware.vchs.testng.TestStatusListener"/>
+            <!--<listener class-name="com.vmware.vchs.testng.GroupListener"/>-->
+        </listeners>
+        <packages>
+            <package name="com.vmware.vchs.role.*"/>
+        </packages>
+    </test>
+</suite>

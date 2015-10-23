@@ -1,0 +1,13 @@
+authentication    : true
+
+praxisServerConnection:
+    praxisConnectUrl     :  https://praxisUrl
+    praxisOrg1            : "PEPSI"
+    dbadminUsername      : "praxisName"
+    dbadminPassword      : "praxisPassword"
+    instanceOwner        : "stu@aas-dbaas.com"
+    instanceOwnerPassword : "Pass@123"
+    endUsername          : "praxisEndName"
+    endUserPasswd        : "praxisEndPassword"
+    iamUserName         : "praxisAdminUser"
+    iamUserPasswd       : "praxisAdminPassword"

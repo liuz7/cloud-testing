@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData
+
+http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+
+	version="1.8">
+
+	<schedule>
+		<job>
+			<name>CPUJob1</name>
+			<group>Group1</group>
+			<description>This is Second Job</description>
+			<job-class>com.vmware.vchs.faults.system.BurnCPULinux</job-class>
+				<job-data-map>
+				   <entry>
+				      <key>IPAddress</key>
+                        <value>192.168.56.40</value>
+                    </entry> 
+                    <entry>       
+                        <key>UserName</key>
+                        <value>ubuntu</value>
+                     </entry>
+                     <entry>
+                         <key>Password</key>
+                        <value>ubuntu</value>
+                    </entry> 
+                    <entry>
+                         <key>ProcessName</key>
+                        <value>/usr/sbin/mysqld</value>
+                    </entry> 
+            </job-data-map>
+		</job>
+				
+		<trigger>
+			<simple>
+				<name>OneTimeTrigger</name>
+				<job-name>CPUJob1</job-name>
+				<job-group>Group1</job-group>
+			</simple>
+		</trigger>
+		
+	</schedule>
+</job-scheduling-data>

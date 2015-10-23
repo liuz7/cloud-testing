@@ -1,0 +1,11 @@
+<suite name="Custom suite" parallel="none">
+    <test verbose="1" name="performance-testing">
+        <listeners>
+            <listener class-name="com.vmware.vchs.testng.ConcurrentListener"/>
+            <listener class-name="com.vmware.vchs.testng.IgnoreListener"/>
+        </listeners>
+        <packages>
+            <package name="com.vmware.vchs.portal.performance.*"/>
+        </packages>
+    </test>
+</suite>

@@ -1,0 +1,30 @@
+dbEngineVersion: mssql_2008R2
+planName: Small
+edition: enterprise
+licenseType: BYOL
+diskSize: 0
+allowedIP:
+customMssqlPort:
+
+testGroup:
+testExcludeGroup:
+testExcludeMethod:
+testClass:
+testMethod:
+retryTimes: 46
+retryTimeout: 900
+retryTimeToWait: 4,8,16
+exitOnFail: false
+parallel: false
+testRounds: 1
+
+groups:
+  - instance
+  - backup
+  - snapshot
+  - iamtest
+
+sns: true
+threadSizeForInstance: 2
+testFile: log/test.log
+

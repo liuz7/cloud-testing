@@ -1,0 +1,334 @@
+---
+vcd_template: &vcd
+  vcloud-host: p14v14-vcd.vchs.vmware.com
+  username: df4trk-vcaod02@yahoo.com 
+  password: Vca90210!
+  org: 767b8313-8958-45c3-9261-58e74bf7fd23 
+  catalog: VDC01 
+  env: dev
+
+vdc_name: &mgt_vdc
+  vdc-name: QE1 
+
+vdc_name: &sql_vdc
+  vdc-name: QE1-SQL
+
+network_template: &network
+  subnet: 192.168.247.0/24
+  properties:
+    network: QE1-Mgmt 
+
+dnslist: &dnsips
+  - 192.168.254.50
+  - 192.168.254.51
+
+ntp: &NTP time.vmware.com
+
+primary_net: &primary_net
+  gateway: 192.168.247.1
+  dns: *dnsips
+  ntp: *NTP
+
+targets:
+  - name: mgmt
+    adapter: vcloud
+    networks:
+      - << : [ *network, *primary_net ]
+        name: mgmt
+        static:
+          - 192.168.247.100-192.168.247.149
+        dynamic:
+          - 192.168.247.150-192.168.247.179
+      - name: ext
+        subnet: 192.168.210.0/24
+        static:
+          - 192.168.210.90-192.168.210.95
+        dynamic:
+          - 192.168.210.96-192.168.210.99
+        gateway: 192.168.210.1
+        dns: *dnsips
+        ntp: *NTP 
+        properties:
+          network: TestExtSvcs 
+    storages:
+      - name: mgmtdata
+        properties:
+          storage-profile: SSD-Accelerated 
+          max-disksize: 153600
+      - name: mgmtlog
+        properties:
+          storage-profile: Standard
+          max-disksize: 153600
+    properties:
+      <<: *vcd
+      <<: *mgt_vdc
+
+  - name: mssql
+    adapter: vcloud
+    networks:
+      - name: mssqlmgmt
+        subnet: 192.168.251.0/24
+        dns: *dnsips
+        static:
+          - 192.168.251.10-192.168.251.19
+        dynamic:
+          - 192.168.251.20-192.168.251.249
+        gateway: 192.168.251.1
+        properties:
+          network: QE1-Node-mgmt 
+      - name: mssqldata
+        subnet: 192.168.249.0/24
+        dns: *dnsips
+        ntp: *NTP 
+        static:
+          - 192.168.249.10-192.168.249.19
+        dynamic:
+          - 192.168.249.20-192.168.249.250 
+        properties:
+          network: QE1-Node-data
+    storages:
+      - name: mssql
+        properties:
+          storage-profile: DBaaS-SSD 
+          max-disksize: 153600
+      - name: mssqlbackup
+        properties:
+          storage-profile: SSD-Accelerated
+          max-disksize: 153600
+    properties:
+      <<: *vcd
+      <<: *sql_vdc
+
+variables:
+  # Service Broker
+  service_name: com.vmware.vchs.dbaas
+  service_version: "1.0"
+  service_location: us-texas-1-14.vchs.vmware.com
+  plan_scope: PRIVATE
+  service_id: 20092189-4c4a-4fcc-8dc5-89e12bb8db52
+  portal_ui_url: https://us-texas-1-14.vchs.vmware.com/appsrv/
+  xaas_url: https://us-texas-1-14.vchs.vmware.com
+  sc_url: https://us-texas-1-14.vchs.vmware.com/
+  potal_be_endpoint: portal.be
+  iam_url: https://us-texas-1-14.vchs.vmware.com/
+  iam_user: od.prod@compeau.org 
+  iam_pwd: Vca102938#*
+  apihead_url: https://us-texas-1-14-appsvc.vca.vmware.com/appsrv/servicebroker/v1/dbaas/mssql 
+  basic_auth_token: b2QucHJvZEBjb21wZWF1Lm9yZzpWY2ExMDI5MzgjKg==
+  plan_name: vCloud Air SQL
+  small_plan_id: Small
+  small_plan_type: vmware.dbaas.mssql.ee.small
+  medium_plan_id: Medium
+  medium_plan_type: vmware.dbaas.mssql.ee.medium
+  large_plan_id: Large
+  large_plan_type: vmware.dbaas.mssql.ee.large
+  deployment_env: ''
+
+  redis-pass: D9me3Gbmv2
+
+
+  # Praxis Billing
+  billing_xaas_user: cds-prod-od@vmware.com 
+  billing_xaas_password: 9aCd2B5$my 
+  billing_apihead_url: http://107.189.88.118:8087
+  billing_enable_hooks: true
+
+  # MySQL
+  mysql-root-password: password
+  mysql-user: dbaas
+  mysql-password: dbaas
+  mysql-database: dbaas,taskdb,portal,billingdb,servicebrokerdb
+  mysql-ssl-enable: false
+  mysql-verify-server-certificate: false
+
+  secure-mysql-root-password: password
+  secure-mysql-user: iamroot
+  secure-mysql-password: iamroot
+  secure-mysql-database: iamdb
+
+  # RabbitMQ
+  secure-rabbitmq-user: iamclient
+  secure-rabbitmq-password: iamclientpwd
+  secure-rabbitmq-server-user: iamserver
+  secure-rabbitmq-server-password: iamserverpwd
+
+  # DSP
+  dmserver-ip: 192.168.247.26
+  dsp-nats-url: "nats://192.168.247.30:4222"
+  dsp-emit-token: da46c147ffe7
+  dsp-nats-prefix: test
+  emit-id-logging: 1
+  emit-id-metrics: 2
+  emit-id-billing: 3
+
+  # IAM
+  iam-enabled: true
+  praxis-login-host: iam.vchs.vmware.com
+  praxis-signer-host: d0p1tlm-iamup-a.prod.vpc.vmw
+  praxis-login-port: 443
+  iam-detach-praxis: "false"
+  apihead-iam-username: "ah-1"
+  apihead-iam-password: "Apihead@123!"
+  portal-iam-username: "ps-1"
+  portal-iam-password: "Portal@123!"
+  acm-iam-username: "acm-1"
+  acm-iam-password: "Acm@123!"
+  ssmgr-iam-username: "ssmgr-1"
+  ssmgr-iam-password: "Ssmgr@123!"
+  sns-iam-username: "sns-1"
+  sns-iam-password: "Sns@123!"
+  gateway-iam-username: "gw-1"
+  gateway-iam-password: "Gateway@123!"
+  billmgr-iam-username: "billmgr-1"
+  billmgr-iam-password: "BillmgrUser@123"
+  taskexec-iam-username: "taskexec-1"
+  taskexec-iam-password: "TaskUser@123"
+  iam-client-org: "ROOTSERVICE"
+  iam-client-timeout: 60000 # millisecond
+
+  # Portal
+  jvm-xms: 512M
+  jvm-xmx: 4096M
+  portal-sns-timeout: 1500
+  portal-sns-enabled: true
+  portal-nats-timeout: 60
+  snapshotmgr-nats-timeout: 60
+  portal-region-fqdn: us-texas-1-14.vchs.vmware.com 
+  praxis-billing-enabled: true
+  dbaasportal-nats-timeout: 60
+
+
+  # Gateway
+  gateway-sns-timeout: 2000
+  gateway-iam-system-user: "system1"
+  gateway-debug-mode: false
+  gateway-min-disk-size: 153600
+  gateway-max-disk-size: 153600
+  gateway-billing-enable: false
+  gateway-praxis-enable: true
+  gateway-node-thread-count: 5
+  gateway-portal-thread-count: 5
+  gateway-event-thread-count: 5
+  gateway-backup-delete-period: 3600 # second
+  gateway-backup-delete-batchsize: 128
+  gateway-snapshot-compact-period: 3600 # second
+  gateway-db-pool-size: 10
+  # the following timeout settings are using second as the unit
+  gateway-db-connect-timeout: 10
+  gateway-sns-timeout: 2000
+  gateway-sb-timeout: 1200
+  gateway-provision-node-timeout: 86400
+  gateway-unprovision-node-timeout: 1200
+  gateway-update-instance-timeout: 1200
+  gateway-create-snapshot-timeout: 86400
+  gateway-compact-snapshot-timeout: 86400
+  gateway-cleanup-instance-timeout: 86400
+  gateway-cleanup-snapshot-timeout: 86400
+  gateway-delete-backup-timeout: 600
+
+
+  # SNS
+  sns-vdc-list:
+    vdcs:
+      mssql:
+        vcdUrl: https://p14v14-vcd.vchs.vmware.com/
+        userName: df4trk-vcaod02@yahoo.com
+        password: Vca90210! 
+        orgName: 767b8313-8958-45c3-9261-58e74bf7fd23 
+        vdcName: QE1-SQL
+        serviceNetworkName: xaas_d4p14 
+  sns-stubbed: false
+  sns-mock: false
+  sns-iam-enabled: true
+  nws-payg-ip-enabled: true
+
+  # Logging
+  log-rotation-size: 10M
+  log-rotation-num: 2
+  daily-rotation-ttl: 2
+  gnatsd-debug-enable: true
+  logstash-debug-enable: 0
+
+  # Binaries & Images
+  docker-registry: 192.168.254.20:5000
+  docker-tag: latest
+  node-publish-address: 'http://192.168.254.21/build'
+  wsus-server: '0.0.0.0'
+  kms-server: 'd0p1-kms.vchs.vmware.com'
+  node-admin-password: password
+  mssql-pid:
+    ent:
+      mssql2008r2: GYF3T-H2V88-GRPPH-HWRJP-QRTYB
+      mssql2012: 748RB-X4T6B-MRM7V-RTVFF-CHC8H
+    std: {}
+
+
+  deploy-env: prod
+  ingress-data-ip-whitelist: 100.64.0.0/10
+  data-gateway: 192.168.249.1 
+  # mssql-storage-bucket: gcs://vca-int-dbaas:254824947044-8plb424o4u58inksi2661r190k6ro0bs@developer.gserviceaccount.com/vca-dbaas-mssql-backup-staging
+  mssql-storage-bucket: gcs://vca-int-dbaas:254824947044-8plb424o4u58inksi2661r190k6ro0bs@developer.gserviceaccount.com
+  mssql-storage-bucket-account: 254824947044-8plb424o4u58inksi2661r190k6ro0bs@developer.gserviceaccount.com
+  mssql-storage-bucket-password: notasecret
+  mssql-storage-bucket-project-id: vca-int-dbaas
+  mssql-storage-bucket-certificate-location: res://DBaaS-b44853419fd6.p12
+  mssql-storage-bucket-name: vca-dbaas-mssql-backup-staging
+  mssql-storage-bucket-object-max-size: 1073741824 
+  enable-resize: true
+  etcd-node-root-path: /dbaasnodes/mssql
+
+  galera-repl-user: wsrep_sst_user
+  galera-repl-pass: vmware
+  galera-proxy-mon-user: admin
+  galera-proxy-mon-pass: password
+
+parameters:
+# Pool Definitions
+  # Docker Hosts
+  pool.idle.max.dbaas: 0
+  pool.idle.max.infracomm: 0
+  pool.idle.max.infradb: 0
+  pool.idle.max.loggingmetrics: 0
+  pool.idle.max.loggingmetricsdb: 0
+
+  # 2008r2 SE LI 
+  pool.idle.min.node-2008r2-std: 10
+  pool.idle.max.node-2008r2-std: 0
+  pool.incr.limit.node-2008r2-std: 4
+
+  # 2008r2 EE LI
+  pool.idle.min.node-2008r2: 0
+  pool.idle.max.node-2008r2: 0
+  pool.incr.limit.node-2008r2: 1
+
+  # 2012 SE LI
+  pool.idle.min.node-2012-std: 10
+  pool.idle.max.node-2012-std: 0 
+  pool.incr.limit.node-2012-std: 4
+
+  # 2012 EE LI
+  pool.idle.min.node-2012: 0 
+  pool.idle.max.node-2012: 0
+  pool.incr.limit.node-2012: 1
+
+  # 2008r2 EE BYOL
+  pool.idle.min.node-2008r2-byol: 0
+  pool.idle.max.node-2008r2-byol: 0 
+  pool.incr.limit.node-2008r2-byol: 1
+
+  # 2012 EE BYOL
+  pool.idle.min.node-2012-byol: 0
+  pool.idle.max.node-2012-byol: 0
+  pool.incr.limit.node-2012-byol: 1
+
+  # Node Buddies
+  pool.idle.min.nodebuddy-2008: 1
+  pool.idle.max.nodebuddy-2008: 0
+  pool.idle.min.nodebuddy: 1
+  pool.idle.max.nodebuddy: 0
+
+overrides:
+
+  svc.ips:
+    apihead:
+      - ext: 192.168.210.90

@@ -1,0 +1,90 @@
+testcase:
+  #GetInstanceTest
+  testGetDBInstance: Create the instacne and get the it to test db connection.
+  testGetDBInstanceDuringProvision: Send the create instance request and get it, the status is creating.
+  testGetNonExistingDBInstance: Get the non existing instance, the error code is 404.
+  testGetExistingDBInstanceWithIncorrectType: Get the instance in incorrect type, the error code is 404.
+  #ListInstancesTest
+  testListDBInstancesAfterProvision: Provision instance, and list the instances to check the size is correct.
+  testListDBInstancesDuringProvision: Send the provision request, and list the instances and the instance status is creating.
+  testListDBInstancesAfterUnProvision: Provision and unprovision the instance, and list the instances to check the size is correct.
+  testListDBInstancesDuringUnProvision: Provision and send the unprovision request, and list the instances to check the size is correct.
+  testListEmptyDBInstances: List the instance when there is no instance provisoned, and check the result.
+  #UnprovisionInstanceTest
+  testUnProvisionDBByList: List the instances, and unprovision the instance in list one by one.
+  testUnProvisionDBDuringProvision: Send the provision request, and unprovision the instance, the error code is 400.
+  testUnProvisionDBAfterProvision: Provision the instance, and then unprovison the instance, the unprovision is done and db connection is false.
+  testUnProvisionNonExistingDBInstance: Unprovision the instance which the instance id is invalid but non existing, the error code is 404.
+  testUnProvisionNonExistingDBInstanceWithRealUUID: Unprovision the instance which the instance id is valid but non existing, the error code is 404.
+  #ProvisionInstanceTest
+  testProvisionDB: Provision the instance, and check the status is changed from creating to available, the db connection is ok.
+  testProvisionDBWithInvalidCustomPort: Provision the instance with the invalid port number, the error code is 400.
+  testProvisionDBWithNonRequiredPropertiesSetToNull: Set the non required properties to null and provision instance, the instance will be provisioned successfully.
+  testProvisionDBWithoutAvailableNodes: Provision the instance until there is no free node in env.
+  testProvisionDBWithIncorrectPlan: Provision the instance with incorrect plan, such as vcpu is not valid.
+  testProvisionMultipleInstanceWithSamePayload: Provision two instances with the same payload, delete one instance, and only another instance has the db connection.
+  testProvisionWithInvalidJsonString: Provision the instance with invalid json string, the error code is 400.
+  testProvisionDBDuringUnProvision: Provision instance during the another instance is being unprovisioned, the provision is successful.
+  testProvisionDBAfterUnProvision: Provision instance after the another instance is unprovisioned, the provision is successful.
+  testProvisionDBWithRequiredPropertiesSetToNull: Set the required properties to null and provision instance, the error code is 400.
+  testConcurrentProvisionDB: Concurrently send the provision requests, and all provision will be successful.
+  testConcurrentProvisionDBandUnProvisionDB: Concurrently send the provision and unprovision requests, both provision and unprovision will be successful.
+  testProvisionDBWithIncorrectPlanName: Provivion the instance with the incorrect plan name, the error code is 400.
+  testProvisionDBWithExtraLargeDisk: Provision the instance with large plan, the provision will be successful.
+  testProvisionDBWithCustomPort: Provision instance with non default port number, the provision should be successful.
+  #UpdateInstanceTest
+  testUpdatePropertiesCanBeUpdated: Provision the instance and update the properties which can be updated, check the value are updated successfully.
+  testUpdatePropertiesCanNotBeUpdated: Provision the instance and update the properties which can not be updated, check the value are not updated successfully.
+  testUpdateDuringProvisionInstance: Send the provision request, and update the properties which can be updated, the error code is 400.
+  testUpdateDuringDeleteInstance: Send the upprovision request, and update the properties which can be updated, the error code is 400.
+  testUpdateWithBackup: Provision the instance with backup is true, and update the properties which can be updated, the value is updated successfully and instance can be provisioned from backup.
+  testUpdateWithSnapshot: Provision the instance and create the snapshot on it, and update the properties which can be updated, the value is updated successfully and instance can be provisioned from snapshot.
+  testUpdateDuringSnapshot: Provision the instance and send the create snapshot, then update the properties which can be updated, the error code is 400.
+  testUpdateDuringBackup: Provision the instance with backup is true, update the instance while the backup is ongoing, the value is updated successfully.
+  testConcurrentUpdateToSingleInstance: Provision the instance, send concurrent update requests to previous instance, the error code is 400 if the requests conflicts.
+  testConcurrentUpdateToMultipleInstances: Provision multiple instances, send concurrent update requests to different instances, all update will be successful.
+  testUpdatePitrPropertiesToTrue: Provision instance with backup to false, update backup settings to true, and check the pitr works.
+  testUpdatePitrPropertiesToFalse: Provision instance with backup to true, update backup settings to false, and check the pitr is disabled.
+  #BackupTest
+  testProvisionDBWithBackup: Provision instance with backup is true, and the provision will be successful.
+  testProvisionDBFromBackupWithNullPassword: Provision instance with backup is true, after backup is created, provision instance from backup with password is null, the original password is not changed.
+  testProvisionDBFromBackupWithNewPasswordAndDescription: Provision instance with backup is true, after backup is created, provision instance from backup with new password and description, the original password and description is changed.
+  testProvisionDBFromInitialBackup: Provision instance with backup is true, after backup is created, provision instance from left edge restore time, the provison is successful and db connection is ok.
+  testProvisionDBFromLastBackup: Provision instance with backup is true, after backup is created, provision instance from right edge restore time, the provison is successful and db connection is ok.
+  testProvisionDBFromMiddleBackup: Provision instance with backup is true, after backup is created, provision instance from middle restore time, the provison is successful and db connection is ok.
+  testProvisionMultipleDBInstanceFromBackup: Provision instance with backup is true, and create multiple db and insert data, after backup is created, provision instance from backup, the provison is successful and db connection is ok.
+  testProvisionFromBackupWithMetaDataChange: Provision instance with backup is true, after backup is created, and change the user password, provision instance from backup, the provison is successful, password is not changed and db connection is ok.
+  testProvisionDBFromBackupWithInvalidLeftRestoreTime: Provision instance with backup is true, after backup is created, restore to invalid restore time before left edge restore time, the error code is 400.
+  testProvisionDBFromBackupWithInvalidRightRestoreTime: Provision instance with backup is true, after backup is created, restore to invalid restore time after right edge restore time, the error code is 400.
+  testRetentionWindow: Set the retention window to new value, provision instance with backup is true, the first restore window is less then the retention time, after left edge restore time is advanced, the restore window is close to retention time.
+  testProvisionDBFromLastBackupWithNonDefaultPort: Provision instance using non default port with backup is true, after backup is created, provision instance from backup with new port number, the original port number is changed.
+  testManualCreateSnapshotInstanceWithBackup: Provision instance with backup is true, create multiple db db and change the meta data like password, after backup is created, provision instance from left edge restore time, the provison is successful and db connection is ok.
+  testProvisionFromDataBackupWithMultipleBackups: Provision instance with backup is true, create multiple db db and insert data, after backup is created, provision instance from left edge restore time, the provison is successful and db connection is ok.
+  #SnapshotTest
+  testManualCreateSnapshotInstance: create manual snapshot, verify response and snapshot created are correct
+  testUnProvisionInstanceDuringCreatingSnapshot: create snapshot, at the same time delete the same instance, delete will fail
+  testManualCreateSnapshotInstanceWithBackup: create instance with pit enabled, then create snapshot, verify snapshot taken is correct
+  testProvisionInstanceFromSnapshot: create snapshot, then restore from this snapshot, verify restored instance is correct
+  testProvisionInstanceFromInvalidSnapshot: restore from an invalid snapshot, verify it fails
+  testAutoCreateSnapshot: set snapshotcycle debug property, create instance with auto snapshot set to true, verify auto snapshot is created and the number doesn’t exceed the limit
+  testAutoCreateSnapshotPreferredTime: set snapshotcycle debug property, create instance with auto snapshot set to true and preferred time set, verify auto snapshot is is only created after preferred time and the number doesn’t exceed the limit
+  testCreateSnapshotDuringInstanceProvision: create instance, at the same time create snapshot, verify create snapshot will fail
+  testCreateSnapshotDuringInstanceUnProvision: create instance, when it success, delete the instance, at the same time create snapshot, verify create snapshot will fail
+  testConcurrentlyCreateSnapshotsOnOneDBInstance: create multipe snapshot on one single instance, verify they all success
+  testInvalidSnapshotSettingsWhenAutoCreateSnapshot: create instance with auto snapshot set but with invalid cycle, verify create instance failed
+  testNonExistingInstanceManualCreateSnapshotRequest: create snapshot with nonexistent instanceid, verify create snapshot failed
+  testInvalidManualCreateSnapshotRequest: create snapshot with invalid instanceid, verify create snapshot failed
+  testProvisionInstanceFromSnapshotWithMultipleDB: create instance, create snapshot with this instance, then restore from this snapshot, verify db created before taking snapshot exist, db created after taking snapshot doesn’t exist
+  testRecursiveProvisionInstanceFromSnapshots: create instance, create snapshot with this instance, then restore from this snapshot, then restore from snapshot again, verify db created before taking snapshot exist, db created after taking snapshot of the first time exist,  db created after taking snapshot of the second time doesn’t exist
+  testDeleteSnapshotInstance: create snapshot, then delete snapshot, verify delete success
+  testDeleteInvalidSnapshotInstance: delete snpashot with invalid id, verify delete fail
+  testDeleteNonExistingSnapshotInstanceWithRealUUID: delete nonexisting snapshot, verify delete fail
+  testDeleteSnapshotInstanceByList: create multiple snapshots, then delete them one by one, verify delete success
+  testDeleteSnapshotInstanceDuringUnProvision: create instance, then create snapshot, then delete snapshot while delete the instance, verify delete snapshot fail
+  testGetSnapshotInstance: create snapshot, then verify all properties of snapshot created is correct
+  testGetNonExistingSnapshotInstance: get snapshot with nonexistent id, verify get failed
+  testGetInvalidSnapshotInstance: get snapshot with invalid id, verify get failed
+  testGetSnapshotExistAfterDeletingInstance: create instance, then create snapshot from it, then delete the instance, verify snapshot exist
+  testListSnapshotInstances: create multiple snapshots, then list snapshots, verify list success and all snapshots properties are correct
+  testDeleteInstanceDuringAutoCreateSnapshotting: create instance with auto snapshot enabled, when it is snapshotting, delete the instance, verify delete will fail
+  testProvisionInstanceFromSnapshotWithNewPassword: create instance, create snapshot from the instance, restore from the snapshot with new password, verify restored instance properties correct and db connection correct

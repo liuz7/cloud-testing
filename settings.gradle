@@ -1,0 +1,3 @@
+include "ymlhelper", "service-discovery", "agent-server", "end-to-end-testing", "test-client", "common", "performance-testing", "persistence", "web"
+include 'long-running-testing'
+

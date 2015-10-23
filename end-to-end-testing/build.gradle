@@ -1,0 +1,265 @@
+task jarTest(type: Jar, dependsOn: testClasses) {
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+task jarMain(type: Jar, dependsOn: classes) {
+    from sourceSets.main.output
+    classifier = 'main'
+}
+
+configurations {
+    testOutput
+}
+
+artifacts {
+    testOutput jarTest, jarMain
+}
+
+def releaseName = hasProperty('releaseName') ? releaseName + '-' : ''
+def branchName = hasProperty('branchName') ? branchName + '-' : 'master-'
+def buildNumber = hasProperty('buildNumber') ? buildNumber : ''
+def gitCommit = hasProperty('gitCommit') ? gitCommit : ''
+version = buildNumber == "" ? "$major_version.$minor_version" + "-SNAPSHOT" : releaseName + branchName + "$major_version.$minor_version" + "-b" + buildNumber
+ext.scmVersion = gitCommit == "" ? "" : gitCommit
+
+jar {
+    from sourceSets.test.output
+    from sourceSets.main.output
+    manifest {
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version, 'Implementation-SCM-Revision': scmVersion
+    }
+}
+
+mainClassName = "com.vmware.vchs.launcher.TestLauncher"
+
+task fulltest(type: Test) {
+    useTestNG() {
+        includeGroups 'full'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/fulltest.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for full cloud-testing"
+}
+
+task sanitytest(type: Test) {
+    useTestNG() {
+        includeGroups 'sanity'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/sanitytest.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for sanity cloud testing."
+}
+
+task alphatest(type: Test) {
+    useTestNG() {
+        includeGroups 'instance'
+        excludeGroups 'snapshot'
+        excludeGroups 'backup'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/alphatest.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for alpha cloud testing."
+}
+
+task iamtest(type: Test) {
+    useTestNG() {
+        includeGroups 'iamtest'
+        excludeGroups 'instance'
+        excludeGroups 'snapshot'
+        excludeGroups 'backup'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/iamtest.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for iam E2E cloud testing."
+}
+
+task populateData(type: Test) {
+    useTestNG() {
+        includeGroups 'populateData'
+        excludeGroups 'iamtest'
+        excludeGroups 'instance'
+        excludeGroups 'snapshot'
+        excludeGroups 'backup'
+        excludeGroups 'datapath'
+        excludeGroups 'billing'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/populateData.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for Pipeline E2E cloud test - Populate Data."
+}
+
+task verifyData(type: Test) {
+    useTestNG() {
+        includeGroups 'verifyData'
+        excludeGroups 'iamtest'
+        excludeGroups 'instance'
+        excludeGroups 'snapshot'
+        excludeGroups 'backup'
+        excludeGroups 'datapath'
+        excludeGroups 'billing'
+        configFailurePolicy 'continue'
+        options.suites("src/test/resources/verifyData.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for Pipeline E2E cloud test - Verify Data."
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+publish {
+    dependsOn assemble
+}
+
+remotes {
+    testserver {
+        host = "$test_agent"
+        user = "$test_user"
+        password = "$test_password"
+    }
+}
+
+task remoteRun << {
+    def destJar = "$test_run_path" + jar.archiveName
+    def cmd = "java -jar ${destJar} --rest.baseUrl=$rest_baseUrl --planName=$planName --dbEngineVersion=$dbEngineVersion  --diskSize=$diskSize --licenseType=$licenseType --edition=$edition"
+    if (!testGroup.isEmpty()) {
+        cmd = cmd + " --testGroup=$testGroup"
+    } else if (!testClass.isEmpty() && testMethod.isEmpty()) {
+        cmd = cmd + " --testClass=$testClass"
+    } else if (!testClass.isEmpty() && !testMethod.isEmpty()) {
+        cmd = cmd + " --testClass=$testClass --testMethod=$testMethod"
+    } else {
+        println "Invalid test parameter"
+    }
+    if (authentication.equals("true")) {
+        println "IAM is enabled."
+        cmd = cmd + " --authentication=$authentication --praxisServerConnection.praxisConnectUrl=$praxisServerConnection_praxisConnectUrl --praxisServerConnection.dbadminUsername=$praxisServerConnection_dbadminUsername --praxisServerConnection.dbadminPassword=$praxisServerConnection_dbadminPassword"
+    } else {
+        println "IAM is disabled."
+        cmd = cmd + " --authentication=$authentication"
+    }
+    if (debug.equals("true")) {
+        cmd = cmd + " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+    }
+    if (!allowedIP.isEmpty()) {
+        cmd = cmd + " --allowedIP=$allowedIP"
+    }
+    ssh.run {
+        session(remotes.testserver) {
+            put new File(libsDir, jar.archiveName).canonicalPath, destJar
+            println 'Deployed cmd is ' + cmd
+            println 'Deployed test jar:' + destJar
+            execute cmd
+        }
+    }
+}
+
+clean.dependsOn cleanLog
+remoteRun.dependsOn assemble

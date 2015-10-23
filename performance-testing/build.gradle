@@ -1,0 +1,73 @@
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile('org.springframework:spring-test:4.1.6.RELEASE')
+    compile('com.h2database:h2:1.4.182')
+    compile('mysql:mysql-connector-java:5.1.35')
+//    testCompile project(path: ':end-to-end-testing', configuration: 'testOutput')
+//    testCompile project(':test-client')
+    testCompile project(':persistence')
+//    compile project(':common')
+    testCompile project(':end-to-end-testing')
+    compile project(':end-to-end-testing')
+//    compile project(':persistence')
+    compile project(':test-client')
+    compile project(':persistence')
+    compile 'org.apache.thrift:libthrift:0.9.2'
+//    compile 'com.vmware.vchs.aas.commons:logging:1.0+'
+//    compile 'com.vmware.vchs.monitoring:metricsemitter:1.0+'
+    compile 'commons-cli:commons-cli:1.2'
+
+//    compile 'org.hibernate:hibernate-core:4.3.7.Final'
+//    compile 'org.hibernate:hibernate-entitymanager:4.3.7.Final'
+//    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+//    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+//    compile('org.springframework:spring-test:4.1.6.RELEASE')
+//    compile('com.h2database:h2:1.4.182')
+//    compile('mysql:mysql-connector-java:5.1.35')
+//    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+//    compile("javax.el:javax.el-api:2.2.4")
+//    compile("org.glassfish.web:javax.el:2.2.4")
+
+
+//    compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
+//    compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+//    compile("org.webjars:bootstrap:3.3.1")
+//    compile("org.webjars:jquery:2.1.1")
+//    compile("org.webjars:highcharts:4.0.4")
+}
+
+task performancetest(type: Test) {
+    useTestNG() {
+        includeGroups 'performance'
+        options.suites("src/test/resources/performancetest.xml")
+    }
+    systemProperties = System.properties
+    systemProperties['user.dir'] = workingDir
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+        showStackTraces = true
+        exceptionFormat "full"
+        info {
+            events "passed", "skipped", "failed", "standardError", "standardOut", "started"
+            showStackTraces = true
+            exceptionFormat "full"
+        }
+    }
+    options {
+        useDefaultListeners = true
+        listeners << 'org.uncommons.reportng.HTMLReporter'
+        listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+    }
+    systemProperties "org.uncommons.reportng.title": "The test result for performance cloud testing."
+}
+
+//bootRepackage {
+//    mainClass = 'com.vmware.vchs.load.generator.service.LoadServiceServer'
+//}
+//mainClassName = "com.vmware.vchs.load.generator.service.LoadServiceServer"
+mainClassName="com.vmware.vchs.load.Coordinator"

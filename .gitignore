@@ -1,0 +1,16 @@
+.vagrant/
+.idea/
+log/
+long_running_data/
+*.iml
+*.class
+build/
+.project
+.classpath
+.settings/
+.gradle/
+.DS_Store
+gradle/wrapper/gradle-wrapper.properties
+deploymentInfo.properties
+test-output
+scripts/e2e/yamler/

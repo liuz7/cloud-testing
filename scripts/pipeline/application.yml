@@ -1,0 +1,36 @@
+rest:
+  baseUrl: http://192.168.70.20:8085
+nats:
+  baseUrl: nats://10.158.14.6:14222
+etcd:
+  baseUrl: http://10.156.14.6:14001
+mysql:
+  host: 192.168.80.57
+  port: 13306
+  user: dbaas
+  password: dbaas
+
+diskSize:153600
+planName: Small
+dbEngineVersion: mssql_2012
+allowedIP: 100.64.14.1
+edition: standard
+licenseType: LI
+
+authentication    : true
+praxisServerConnection:
+    praxisConnectUrl     :  https://iam.vchs.vmware.com
+    praxisOrg1            : "PEPSI"
+    dbadminUsername      : "sre3.dbaas.automation@gmail.com"
+    dbadminPassword      : "testBeta1#123"
+
+retryTimes: 200
+retryTimeout: 1800
+retryTimeToWait: 4,8,16
+dataPath:
+  dbWriter:
+    period: 1
+    rowSize: 1024
+  waitTime: 60
+  autoSnapshotCycle: 1800
+  preLoadSize: 640000

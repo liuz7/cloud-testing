@@ -1,0 +1,27 @@
+env: test
+
+emitterConfig: {
+  emitterId: 2,
+  groupId: 2,
+  uri : "nats://localhost:4222",
+  username: test2,
+  password: pass,
+  enableRemoteLogging: false #false in dev env by default. true by default in production env.
+}
+
+localLogConfig: {
+  fileName: gateway_lib.log, #by default named after {env}.log
+  consoleOutput: true, # default is false
+  rollingStyle: 1, #1 by size, 2 - by time, 3 - by size and time
+  maxFileSizeInMB: 1000, #default is 1000MB (1GB)
+  rotationTimeInMinutes: 720, #default is every 12 hours
+  maxNumOfRollingBackupFiles: 5, #max number of rolling log files including current log files. Default 5
+  immediateFlush: true,  # Flush immediately to FS
+  enableFileSystemLog: false # enable or disable FS log
+}
+
+loggerConfig: {
+  applicationName: gateway_log,
+}
+
+

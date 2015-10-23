@@ -1,0 +1,75 @@
+rest:
+  baseUrl: http://192.168.56.40:8085
+nats:
+  baseUrl: nats://127.0.0.1:14223
+etcd:
+  baseUrl: http://192.168.56.40:14001
+jira:
+  baseUrl: https://vchs-eng.atlassian.net/rest/api/2/
+concurrent:
+  invocationCount: 1
+  threadPoolSize: 1
+mysql:
+  host: 10.156.75.240
+  port: 13306
+  user: root
+  password: password
+billing:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${mysql.host}:${mysql.port}/billingdb
+    username: ${mysql.user}
+    password: ${mysql.password}
+gateway:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${mysql.host}:${mysql.port}/dbaas
+    username: ${mysql.user}
+    password: ${mysql.password}
+#performance:
+#  datasource:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://${mysql.host}:${mysql.port}/performance
+#    username: root
+#    password:
+groups:
+  - instance
+  - backup
+  - snapshot
+  - iamtest
+
+testGroup:
+testExcludeGroup:
+testClass:
+testMethod:
+planName: Small
+dbEngineVersion: mssql_2008R2
+allowedIP:
+customMssqlPort:
+diskSize: 0
+threadSizeForInstance: 2
+retryTimes:
+exitOnFail: false
+edition: enterprise
+licenseType: BYOL
+sns:
+
+cdsServer:
+  baseUrl: 10.156.75.240
+  user: root
+  password: password
+vdcNumber: 01
+
+authentication    : false
+
+praxisServerConnection:
+    praxisConnectUrl     :  https://praxisUrl
+    praxisOrg1            : "PEPSI"
+    dbadminUsername      : "praxisName"
+    dbadminPassword      : "praxisPassword"
+    instanceOwner        : "stu@aas-dbaas.com"
+    instanceOwnerPassword : "Pass@123"
+    endUsername          : "praxisEndName"
+    endUserPasswd        : "praxisEndPassword"
+    iamUserName         : "praxisAdminUser"
+    iamUserPasswd       : "praxisAdminPassword"

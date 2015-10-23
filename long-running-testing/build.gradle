@@ -1,0 +1,7 @@
+
+dependencies {
+    testCompile project(':end-to-end-testing')
+    compile project(':end-to-end-testing')
+}
+
+mainClassName = "com.vmware.vchs.longrunning.core.LongRunningTest"

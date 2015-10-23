@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+        xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData
+
+http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+
+        version="1.8">
+    <schedule>
+        <job>
+            <name>KillJob1</name>
+            <group>Group1</group>
+            <description>This is an example for kill process</description>
+            <job-class>com.vmware.vchs.faults.system.KillProcessLinux</job-class>
+            <job-data-map>
+                <entry>
+                    <key>IPAddress</key>
+                    <value>10.33.116.227</value>
+                </entry>
+                <entry>
+                    <key>UserName</key>
+                    <value>root</value>
+                </entry>
+                <entry>
+                    <key>Password</key>
+                    <value>ca$hc0w</value>
+                </entry>
+                <entry>
+                    <key>ProcessName</key>
+                    <value>cat</value>
+                </entry>
+                <entry>
+                    <key>Instances</key>
+                    <value>2</value>
+                </entry>
+            </job-data-map>
+        </job>
+        <trigger>
+            <simple>
+                <name>OneTimeTrigger1</name>
+                <job-name>KillJob1</job-name>
+                <job-group>Group1</job-group>
+            </simple>
+        </trigger>
+    </schedule>
+</job-scheduling-data>

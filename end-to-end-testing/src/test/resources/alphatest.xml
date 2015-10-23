@@ -1,0 +1,17 @@
+<suite name="Custom suite" parallel="none" configfailurepolicy="continue">
+    <test verbose="1" name="alpha-testing">
+        <parameter name="dbEngineVersion" value="mssql_2008R2"/>
+        <parameter name="planName" value="Small"/>
+        <parameter name="diskSize" value="0"/>
+        <listeners>
+            <listener class-name="com.vmware.vchs.testng.ConcurrentListener"/>
+            <listener class-name="com.vmware.vchs.testng.IgnoreListener"/>
+            <listener class-name="com.vmware.vchs.testng.TestStatusListener"/>
+        </listeners>
+        <packages>
+            <package name="com.vmware.vchs.instance.*"/>
+            <package name="com.vmware.vchs.backup.*"/>
+            <package name="com.vmware.vchs.snapshot.*"/>
+        </packages>
+    </test>
+</suite>

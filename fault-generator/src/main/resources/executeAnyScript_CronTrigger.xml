@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData
+
+http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+
+	version="1.8">
+	<schedule>
+		<job>
+			<name>KillJob1</name>
+			<group>CronJobGroup1</group>
+			<description>This is to stop a process</description>
+			<job-class>com.vmware.vchs.faults.system.ExecuteAnyScriptLinux</job-class>
+				<job-data-map>
+				   <entry>
+				      <key>IPAddress</key>
+                        <value>192.168.56.40</value>
+                    </entry> 
+                    <entry>       
+                        <key>UserName</key>
+                        <value>ubuntu</value>
+                     </entry>
+                     <entry>
+                         <key>Password</key>
+                        <value>ubuntu</value>
+                    </entry>
+   					<entry>
+                         <key>Script</key>
+                        <value>sudo service gnats stop </value>
+                   </entry>
+            </job-data-map>
+		</job>
+		<job>
+			<name>RestoreJob1</name>
+			<group>CronJobGroup1</group>
+			<description>This is to restore a process</description>
+			<job-class>com.vmware.vchs.faults.system.ExecuteAnyScriptLinux</job-class>
+				<job-data-map>
+				   <entry>
+				      <key>IPAddress</key>
+                        <value>192.168.56.40</value>
+                    </entry> 
+                    <entry>       
+                        <key>UserName</key>
+                        <value>ubuntu</value>
+                     </entry>
+                     <entry>
+                         <key>Password</key>
+                        <value>ubuntu</value>
+                    </entry>
+   					<entry>
+                         <key>Script</key>
+                        <value>sudo service gnats start</value>
+                        </entry>
+            </job-data-map>
+		</job>
+		<trigger>
+			<cron>
+				<name>dummyTrigger1</name>
+				<job-name>KillJob1</job-name>
+				<job-group>CronJobGroup1</job-group>
+				<!-- Triggered at a specified time every day -->
+				<cron-expression>0/5 * * * * ?</cron-expression>
+			</cron>
+		</trigger>
+		<trigger>
+			<cron>
+				<name>dummyTrigger2</name>
+				<job-name>RestoreJob1</job-name>
+				<job-group>CronJobGroup1</job-group>
+				<!-- Triggered at a specified time every day -->
+				<cron-expression>1/5 * * * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</schedule>
+</job-scheduling-data>

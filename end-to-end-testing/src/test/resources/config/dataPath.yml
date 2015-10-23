@@ -1,0 +1,6 @@
+dataPath:
+  dbWriter:
+    period: 1
+    rowSize: 64
+  waitTime: 20
+  preLoadSize: 1024
